@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.ionic.zlib": {
+      "version": "https://github.com/PixelWizards/com.ionic.zlib.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "c2603651d2947fe3995bdd0bd2540fe4543f034e"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
@@ -103,6 +110,13 @@
     "com.unity.nuget.mono-cecil": {
       "version": "1.11.4",
       "depth": 3,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.1",
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"

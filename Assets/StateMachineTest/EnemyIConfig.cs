@@ -1,3 +1,4 @@
+using Serialization;
 using UnityEngine;
 using ZeroPass.StateMachine;
 
@@ -7,6 +8,7 @@ public class EnemyIConfig : IEntityConfig
     public GameObject CreatePrefab()
     {
         var gameObject = EntityTemplates.CreateBaseEntity(ID, ID, "");
+        gameObject.AddComponent<SaveLoadRoot>();
         gameObject.AddComponent<StateMachineController>();
         var animator = gameObject.GetComponent<Animator>();
         animator.runtimeAnimatorController = TestSM.HeroRAC;

@@ -10,6 +10,10 @@ namespace Serialization
 {
     public class SaveLoadRoot : RMonoBehaviour
     {
+        private bool hasOnSpawnRun;
+
+        private bool registered = true;
+
         private static Dictionary<string, ISerializableComponentManager> serializableComponentManagers;
 
         public static void DestroyStatics()
@@ -17,8 +21,37 @@ namespace Serialization
             serializableComponentManagers = null;
         }
 
+        protected override void OnSpawn()
+        {
+            base.OnSpawn();
+            if (registered)
+            {
+                SaveLoader.Instance.saveManager.Register(this);
+            }
+            hasOnSpawnRun = true;
+        }
+
         protected override void OnPrefabInit()
         {
+        }
+
+        public void SetRegistered(bool registered)
+        {
+            if (this.registered != registered)
+            {
+                this.registered = registered;
+                if (hasOnSpawnRun)
+                {
+                    if (registered)
+                    {
+                        SaveLoader.Instance.saveManager.Register(this);
+                    }
+                    else
+                    {
+                        SaveLoader.Instance.saveManager.Unregister(this);
+                    }
+                }
+            }
         }
 
         public void Save(BinaryWriter writer)

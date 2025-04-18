@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -25,6 +26,30 @@ namespace ZeroPass
         private static System.Random random = new System.Random();
 
         private static string defaultRootFolder = Application.persistentDataPath;
+
+        public static string GetRRootPath()
+        {
+            if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
+            {
+                string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                return Path.Combine(folderPath, "R");
+            }
+            return defaultRootFolder;
+        }
+
+        public static string GetTitleFolderName()
+        {
+            return "ZeroPass";
+        }
+
+        public static string RootFolder()
+        {
+            if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.WindowsEditor)
+            {
+                return Path.Combine(GetRRootPath(), GetTitleFolderName());
+            }
+            return GetRRootPath();
+        }
 
         public static void Swap<T>(ref T a, ref T b)
         {
@@ -320,7 +345,7 @@ namespace ZeroPass
             }
 
             RPrefabID component = gameObject.GetComponent<RPrefabID>();
-            if ((UnityEngine.Object)component != (UnityEngine.Object)null)
+            if (component != null)
             {
                 if (initialize_id)
                 {

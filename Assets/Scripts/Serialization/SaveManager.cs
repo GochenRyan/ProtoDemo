@@ -9,6 +9,7 @@ using Debug = ZeroPass.Debug;
 
 namespace Serialization
 {
+    [SerializationConfig(MemberSerialization.OptIn)]
     public class SaveManager : RMonoBehaviour
     {
         private enum BoundaryTag : uint
@@ -152,6 +153,22 @@ namespace Serialization
             {
                 SaveGame.Instance.GetComponent<SaveLoadRoot>()
             }), writer);
+            foreach (Tag orderedKey in orderedKeys)
+            {
+                List<SaveLoadRoot> list = sceneObjects[orderedKey];
+                int count = list.Count;
+                if (count > 0)
+                {
+                    foreach (SaveLoadRoot item in list)
+                    {
+                        if (item != null)
+                        {
+                            Write(orderedKey, list, writer);
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         private void Write(Tag key, List<SaveLoadRoot> value, BinaryWriter writer)
