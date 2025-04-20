@@ -60,7 +60,7 @@ public class Assets : RMonoBehaviour, ISerializationCallbackReceiver
 
     public static void AddPrefab(RPrefabID prefab)
     {
-        if (!((UnityEngine.Object)prefab == (UnityEngine.Object)null))
+        if (!(prefab == null))
         {
             prefab.UpdateSaveLoadTag();
             if (PrefabsByTag.ContainsKey(prefab.PrefabTag))
@@ -107,7 +107,7 @@ public class Assets : RMonoBehaviour, ISerializationCallbackReceiver
     public static GameObject GetPrefab(Tag tag)
     {
         GameObject gameObject = TryGetPrefab(tag);
-        if ((UnityEngine.Object)gameObject == (UnityEngine.Object)null)
+        if (gameObject == null)
         {
             Debug.LogWarning("Missing prefab: " + tag);
         }

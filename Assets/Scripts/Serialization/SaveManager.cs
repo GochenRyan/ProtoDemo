@@ -68,7 +68,7 @@ namespace Serialization
 
         private void OnAddPrefab(RPrefabID prefab)
         {
-            if (!((UnityEngine.Object)prefab == (UnityEngine.Object)null))
+            if (!(prefab == null))
             {
                 Tag saveLoadTag = prefab.GetSaveLoadTag();
                 prefabMap[saveLoadTag] = prefab.gameObject;
@@ -83,7 +83,7 @@ namespace Serialization
         private List<SaveLoadRoot> GetSaveLoadRootList(SaveLoadRoot saver)
         {
             RPrefabID component = saver.GetComponent<RPrefabID>();
-            if ((UnityEngine.Object)component == (UnityEngine.Object)null)
+            if (component == null)
             {
                 DebugUtil.LogErrorArgs(saver.gameObject, "All savers must also have a KPrefabID on them but", saver.gameObject.name, "does not have one.");
                 return null;
@@ -146,9 +146,6 @@ namespace Serialization
             orderedKeys.Clear();
             orderedKeys.AddRange(sceneObjects.Keys);
             orderedKeys.Remove(SaveGame.Instance.PrefabID());
-            orderedKeys = (from a in orderedKeys
-                           orderby a.Name.Contains("UnderConstruction")
-                           select a).ToList();
             Write(SaveGame.Instance.PrefabID(), new List<SaveLoadRoot>(new SaveLoadRoot[1]
             {
                 SaveGame.Instance.GetComponent<SaveLoadRoot>()
@@ -243,7 +240,7 @@ namespace Serialization
                         for (int k = 0; k < num4; k++)
                         {
                             SaveLoadRoot x = SaveLoadRoot.Load(value, reader);
-                            if ((UnityEngine.Object)x == (UnityEngine.Object)null)
+                            if (x == (UnityEngine.Object)null)
                             {
                                 Debug.LogError("Error loading data [" + text + "]");
                                 return false;

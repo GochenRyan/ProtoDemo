@@ -20,10 +20,13 @@ namespace Serialization
                 {
                     var gameObject = new GameObject(nameof(SaveGame));
                     DontDestroyOnLoad(gameObject);
+                    gameObject.SetActive(false);
                     _instance = gameObject.AddComponent<SaveGame>();
                     RPrefabID rPrefabID = gameObject.AddOrGet<RPrefabID>();
                     rPrefabID.PrefabTag = TagManager.Create(nameof(SaveGame), nameof(SaveGame));
+                    rPrefabID.UpdateSaveLoadTag();
                     gameObject.AddComponent<SaveLoadRoot>();
+                    gameObject.SetActive(true);
                 }
 
                 return _instance;

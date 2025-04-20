@@ -5,6 +5,7 @@ using ZeroPass.Serialization;
 
 namespace ZeroPass.StateMachine
 {
+    [SerializationConfig(MemberSerialization.OptIn)]
     public class StateMachineController : RMonoBehaviour, ISaveLoadableDetails, IStateMachineControllerHack
     {
         public class CmpDef

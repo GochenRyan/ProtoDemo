@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using UnityEngine;
 using ZeroPass;
 using ZeroPass.Serialization;
@@ -8,6 +9,7 @@ using Debug = ZeroPass.Debug;
 
 namespace Serialization
 {
+    [SkipSaveFileSerialization]
     public class SaveLoadRoot : RMonoBehaviour
     {
         private bool hasOnSpawnRun;
@@ -33,6 +35,10 @@ namespace Serialization
 
         protected override void OnPrefabInit()
         {
+            if (serializableComponentManagers == null)
+            {
+                serializableComponentManagers = new Dictionary<string, ISerializableComponentManager>();
+            }
         }
 
         public void SetRegistered(bool registered)

@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace ZeroPass
 {
@@ -118,30 +117,34 @@ namespace ZeroPass
 
         public void LateUpdate()
         {
-            if (isLoading)
-            {
-                RObjectManager.Instance.Cleanup();
-                RMonoBehaviour.lastGameObject = null;
-                RMonoBehaviour.lastObj = null;
-                Resources.UnloadUnusedAssets();
-                GC.Collect();
-                if (OnPreLoadScene != null)
-                {
-                    OnPreLoadScene();
-                }
-                SceneManager.LoadScene(loadingSceneName);
-                if (OnPostLoadScene != null)
-                {
-                    OnPostLoadScene();
-                }
-                isLoading = false;
-                currentSceneName = loadingSceneName;
-                loadingSceneName = null;
-            }
+            //if (isLoading)
+            //{
+            //    RObjectManager.Instance.Cleanup();
+            //    RMonoBehaviour.lastGameObject = null;
+            //    RMonoBehaviour.lastObj = null;
+            //    Resources.UnloadUnusedAssets();
+            //    GC.Collect();
+            //    if (OnPreLoadScene != null)
+            //    {
+            //        OnPreLoadScene();
+            //    }
+            //    SceneManager.LoadScene(loadingSceneName);
+            //    if (OnPostLoadScene != null)
+            //    {
+            //        OnPostLoadScene();
+            //    }
+            //    isLoading = false;
+            //    currentSceneName = loadingSceneName;
+            //    loadingSceneName = null;
+            //}
         }
 
         private void OnDestroy()
         {
+            if (IsExiting)
+            {
+                RObjectManager.DestroyInstance();
+            }
         }
 
         public static List<Type> GetCurrentDomainTypes()

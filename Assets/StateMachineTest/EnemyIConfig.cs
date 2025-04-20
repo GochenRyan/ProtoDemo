@@ -9,7 +9,6 @@ public class EnemyIConfig : IEntityConfig
     {
         var gameObject = EntityTemplates.CreateBaseEntity(ID, ID, "");
         gameObject.AddComponent<SaveLoadRoot>();
-        gameObject.AddComponent<StateMachineController>();
         var animator = gameObject.GetComponent<Animator>();
         animator.runtimeAnimatorController = TestSM.HeroRAC;
         return gameObject;

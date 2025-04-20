@@ -10,8 +10,6 @@ public class EntityTemplates
 
     private static GameObject baseEntityTemplate;
 
-    private static GameObject placedEntityTemplate;
-
     public static void CreateTemplates()
     {
         unselectableEntityTemplate = new GameObject("unselectableEntityTemplate");
@@ -28,7 +26,6 @@ public class EntityTemplates
         baseEntityTemplate.AddComponent<Animator>();
         baseEntityTemplate.AddComponent<StateMachineController>();
         Object.DontDestroyOnLoad(baseEntityTemplate);
-        placedEntityTemplate = Object.Instantiate(baseEntityTemplate);
     }
 
     public static GameObject CreateEntity(string id, string name, bool is_selectable = true)

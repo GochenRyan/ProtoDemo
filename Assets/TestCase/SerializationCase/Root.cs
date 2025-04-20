@@ -13,10 +13,22 @@ public class Root : RMonoBehaviour
 
     protected override void OnPrefabInit()
     {
-        //var _ = SaveLoader.Instance;
         var _ = SaveGame.Instance;
+        SaveLoader.Instance.saveManager.onRegister += SaveManager_onRegister;
         EntityTemplates.CreateTemplates();
         LoadEntities();
+    }
+
+    private void SaveManager_onRegister(SaveLoadRoot saveLoadRoot)
+    {
+        var gameObject = saveLoadRoot.gameObject;
+        RPrefabID prefabID = gameObject.GetComponent<RPrefabID>();
+
+        if (prefabID != null && prefabID.PrefabTag == EnemyIConfig.ID)
+        {
+            ObjectCase objectCase = gameObject.GetComponent<ObjectCase>();
+            //Struct1 struct1 = objectCase.Obj1 as Struct1;
+        }
     }
 
     public void LoadEntities()
