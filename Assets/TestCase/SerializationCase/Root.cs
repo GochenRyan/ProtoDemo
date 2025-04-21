@@ -10,6 +10,8 @@ public class Root : RMonoBehaviour
 {
     private static Root _instance;
     private GameObject _enemyI;
+    private GameObject enemyI1;
+    private GameObject enemyI2;
 
     protected override void OnPrefabInit()
     {
@@ -28,6 +30,7 @@ public class Root : RMonoBehaviour
         {
             ObjectCase objectCase = gameObject.GetComponent<ObjectCase>();
             //Struct1 struct1 = objectCase.Obj1 as Struct1;
+            InheritCase inheritCase = gameObject.GetComponent<InheritCase>();
         }
     }
 
@@ -73,5 +76,26 @@ public class Root : RMonoBehaviour
             stringValue1 = "asasasa"
         };
         _enemyI.SetActive(true);
+    }
+
+    public void SpawnInheritCase()
+    {
+        enemyI1 = Util.RInstantiate(Assets.GetPrefab(EnemyIConfig.ID));
+        enemyI1.transform.position = new Vector3(5, 0, 0);
+        var inheritCase1 = enemyI1.AddOrGet<InheritCase>();
+        inheritCase1.baseCls = new ChildCls1
+        {
+            IntValue1 = 1234
+        };
+        enemyI1.SetActive(true);
+
+        enemyI2 = Util.RInstantiate(Assets.GetPrefab(EnemyIConfig.ID));
+        enemyI2.transform.position = new Vector3(5, 0, 0);
+        var inheritCase2 = enemyI2.AddOrGet<InheritCase>();
+        inheritCase2.baseCls = new ChildCls2
+        {
+            FloatValue1 = 1.234f
+        };
+        enemyI2.SetActive(true);
     }
 }
