@@ -11,6 +11,7 @@ public class EnemyIConfig : IEntityConfig
         gameObject.AddComponent<SaveLoadRoot>();
         var animator = gameObject.GetComponent<Animator>();
         animator.runtimeAnimatorController = TestSM.HeroRAC;
+        gameObject.AddComponent<InheritCase>();
         return gameObject;
     }
 

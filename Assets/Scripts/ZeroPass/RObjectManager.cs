@@ -29,11 +29,11 @@ namespace ZeroPass
         public static void DestroyInstance()
         {
             _instance.Cleanup();
-            if (_instance.gameObject != null)
+            if (_instance != null && _instance.gameObject != null)
             {
                 _instance.DeleteObject();
+                _instance = null;
             }
-            _instance = null;
         }
 
         public void Cleanup()

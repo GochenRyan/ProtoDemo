@@ -82,6 +82,7 @@ public class Root : RMonoBehaviour
     {
         enemyI1 = Util.RInstantiate(Assets.GetPrefab(EnemyIConfig.ID));
         enemyI1.transform.position = new Vector3(5, 0, 0);
+        // Only the components added when assembling the Prefab (via Assets.AddPrefab) will be included in serialization.
         var inheritCase1 = enemyI1.AddOrGet<InheritCase>();
         inheritCase1.baseCls = new ChildCls1
         {
