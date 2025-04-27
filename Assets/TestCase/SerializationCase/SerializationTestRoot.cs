@@ -6,9 +6,8 @@ using System.IO;
 using UnityEngine;
 using ZeroPass;
 
-public class Root : RMonoBehaviour
+public class SerializationTestRoot : RMonoBehaviour
 {
-    private static Root _instance;
     private GameObject _enemyI;
     private GameObject enemyI1;
     private GameObject enemyI2;
