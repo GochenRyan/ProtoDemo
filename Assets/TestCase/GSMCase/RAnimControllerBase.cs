@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using ZeroPass;
 
 public class RAnimControllerBase : MonoBehaviour
 {
@@ -18,12 +16,17 @@ public class RAnimControllerBase : MonoBehaviour
 
     private Animator animator;
     private Queue<AnimEntry> animQueue = new Queue<AnimEntry>();
-    private bool stopped = true;
     private AnimEntry? curAnim = null;
+    public string initialAnim;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
+
+        if (!string.IsNullOrEmpty(initialAnim))
+        {
+            Play(initialAnim, PlayMode.Loop, 1f, 0f);
+        }
     }
 
     private void Update()
@@ -42,13 +45,13 @@ public class RAnimControllerBase : MonoBehaviour
 
     private void PlayNext()
     {
-        stopped = false;
-
         var entry = animQueue.Dequeue();
         animator.speed = entry.speed;
         animator.Play(entry.anim, 0, entry.timeOffset);
 
-        if (curAnim?.mode == PlayMode.Loop  && animQueue.Count == 0)
+        curAnim = entry;
+
+        if (curAnim.HasValue && curAnim.Value.mode == PlayMode.Loop && animQueue.Count == 0)
         {
             animQueue.Enqueue((AnimEntry)curAnim);
         }
@@ -56,19 +59,15 @@ public class RAnimControllerBase : MonoBehaviour
 
     public void Play(string anim_name, PlayMode mode = PlayMode.Once, float speed = 1f, float time_offset = 0f)
     {
-        if (!stopped)
-        {
-            Stop();
-        }
+        Stop();
         Queue(anim_name, mode, speed, time_offset);
+        PlayNext();
+        //playNow = true;
     }
 
     public void Play(string[] anim_names, PlayMode mode = PlayMode.Once, float speed = 1f, float time_offset = 0f)
     {
-        if (!stopped)
-        {
-            Stop();
-        }
+        Stop();
 
         for (int i = 0; i < anim_names.Length - 1; i++)
         {
@@ -76,6 +75,7 @@ public class RAnimControllerBase : MonoBehaviour
         }
 
         Queue(anim_names[anim_names.Length - 1], mode, speed, time_offset);
+        PlayNext();
     }
 
     public void Queue(string anim_name, PlayMode mode = PlayMode.Once, float speed = 1f, float time_offset = 0f)
@@ -87,17 +87,11 @@ public class RAnimControllerBase : MonoBehaviour
             speed = speed,
             timeOffset = time_offset
         });
-
-        if (animQueue.Count == 1 && stopped)
-        {
-            PlayNext();
-        }
     }
 
     public void Stop()
     {
         animQueue.Clear();
-        stopped = true;
         curAnim = null;
     }
 }

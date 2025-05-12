@@ -50,23 +50,18 @@ public class AttackSMComponent : StateMachineComponent<AttackSMComponent.StatesI
             {
                 //TODO: GAS
                 var attackTargetGO = attackTarget.Get(smi);
-                var attackTargetAnimator = attackTargetGO.GetComponent<Animator>();
-                attackTargetAnimator.Play("Hit");
+                var attackTargetAnimController = attackTargetGO.GetComponent<RAnimControllerBase>();
+                attackTargetAnimController.Play("Hit");
 
                 //fake batter
-                if (Random.value < 0.5f)
+                if (Random.value < 0.0f)
                 {
                     smi.GoTo(attack);
                 }
                 else
                 {
-                    smi.Play("Idle");
-                    //TODO: Anim Queue  Hit--end-->Idle
-                    
-                    DOVirtual.DelayedCall(0.5f, () =>
-                    {
-                        attackTargetAnimator.Play("Idle");
-                    });
+                    smi.Queue("Idle", PlayMode.Loop);
+                    attackTargetAnimController.Queue("Idle", PlayMode.Loop);
                 }
             }).ReturnSuccess(); ;
         }

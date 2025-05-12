@@ -8,7 +8,7 @@ public class HeroConfig : IEntityConfig
 
     public GameObject CreatePrefab()
     {
-       var gameObject = EntityTemplates.CreateBaseEntity(ID, ID, "");
+       var gameObject = EntityTemplates.CreateBaseEntity(ID, ID, "Idle", "");
         gameObject.AddComponent<SaveLoadRoot>();
         var animator = gameObject.GetComponent<Animator>();
         animator.runtimeAnimatorController = TestSM.HeroRAC;

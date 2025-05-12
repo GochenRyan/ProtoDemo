@@ -28,21 +28,25 @@ public class EntityTemplates
         Object.DontDestroyOnLoad(baseEntityTemplate);
     }
 
-    public static GameObject CreateEntity(string id, string name, bool is_selectable = true)
+    public static GameObject CreateEntity(string id, string name, string anim, bool is_selectable = true)
     {
         GameObject gameObject = null;
         gameObject = ((!is_selectable) ? Object.Instantiate(unselectableEntityTemplate) : Object.Instantiate(selectableEntityTemplate));
         Object.DontDestroyOnLoad(gameObject);
-        ConfigEntity(gameObject, id, name, is_selectable);
+        ConfigEntity(gameObject, id, name, anim, is_selectable);
         return gameObject;
     }
 
-    private static void ConfigEntity(GameObject template, string id, string name, bool is_selectable = true)
+    private static void ConfigEntity(GameObject template, string id, string name, string anim, bool is_selectable = true)
     {
         template.name = id;
         template.AddOrGet<Facing>();
         RPrefabID rPrefabID = template.AddOrGet<RPrefabID>();
         rPrefabID.PrefabTag = TagManager.Create(id, name);
+
+        RAnimControllerBase animController = template.AddOrGet<RAnimControllerBase>();
+        animController.initialAnim = anim;
+
         if (is_selectable)
         {
             RSelectable rSelectable = template.AddOrGet<RSelectable>();
@@ -50,11 +54,11 @@ public class EntityTemplates
         }
     }
 
-    public static GameObject CreateBaseEntity(string id, string name, string desc)
+    public static GameObject CreateBaseEntity(string id, string name, string anim, string desc)
     {
         GameObject gameObject = Object.Instantiate(baseEntityTemplate);
         Object.DontDestroyOnLoad(gameObject);
-        ConfigEntity(gameObject, id, name, true);
+        ConfigEntity(gameObject, id, name, anim, true);
         return gameObject;
     }
 }

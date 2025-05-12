@@ -19,16 +19,16 @@ public abstract class GameStateMachine<StateMachineType, StateMachineInstanceTyp
         {
         }
 
-        //public void Queue(string anim, KAnim.PlayMode mode = KAnim.PlayMode.Once)
-        //{
-        //    StateMachineInstanceType smi = base.smi;
-        //    ((Instance)smi).GetComponent<KBatchedAnimController>().Queue(anim, mode, 1f, 0f);
-        //}
-
-        public void Play(string anim)
+        public void Queue(string anim, PlayMode mode = PlayMode.Once)
         {
             StateMachineInstanceType smi = base.smi;
-            ((Instance)smi).GetComponent<Animator>().Play(anim);
+            smi.GetComponent<RAnimControllerBase>().Queue(anim, mode);
+        }
+
+        public void Play(string anim, PlayMode mode = PlayMode.Once)
+        {
+            StateMachineInstanceType smi = base.smi;
+            smi.GetComponent<RAnimControllerBase>().Play(anim, mode);
         }
     }
 

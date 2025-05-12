@@ -7,12 +7,13 @@ public class GSMEnemy1Config : IEntityConfig
 
     public GameObject CreatePrefab()
     {
-        var gameObject = EntityTemplates.CreateBaseEntity(ID, ID, "");
+        var gameObject = EntityTemplates.CreateBaseEntity(ID, ID, "Idle", "");
         gameObject.AddComponent<SaveLoadRoot>();
         var animator = gameObject.GetComponent<Animator>();
         animator.runtimeAnimatorController = GSMTestRoot.GSMEnemy1RAC;
         gameObject.AddComponent<CombatEntity>();
         gameObject.AddComponent<AttackSMComponent>();
+        gameObject.AddComponent<RAnimControllerBase>();
 
         return gameObject;
     }
