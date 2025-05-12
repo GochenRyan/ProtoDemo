@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class AttackSMComponent : StateMachineComponent<AttackSMComponent.StatesInstance>
 {
@@ -49,9 +50,35 @@ public class AttackSMComponent : StateMachineComponent<AttackSMComponent.StatesI
             success.Enter(delegate (StatesInstance smi) 
             {
                 //TODO: GAS
+                var attackerGO = attacker.Get(smi);
+                SpriteRenderer sr = attackerGO.GetComponent<SpriteRenderer>();
+                Vector3 centerPos = sr.bounds.center;
+
+                var particlePrefab = Resources.Load<GameObject>("FX/CFXR Impact Glowing HDR (Blue)");
+                GameObject effect = Instantiate(particlePrefab, centerPos, Quaternion.identity);
+                var ps = effect.GetComponent<ParticleSystem>();
+                var main = ps.main;
+                main.stopAction = ParticleSystemStopAction.Destroy;
+                ps.Play();
+                float life = main.duration + main.startLifetime.constantMax;
+                Destroy(effect, life + 0.1f);
+
                 var attackTargetGO = attackTarget.Get(smi);
                 var attackTargetAnimController = attackTargetGO.GetComponent<RAnimControllerBase>();
                 attackTargetAnimController.Play("Hit");
+
+                SpriteRenderer sr1 = attackTargetGO.GetComponent<SpriteRenderer>();
+                Vector3 centerPos1 = sr1.bounds.center;
+                var particlePrefab1 = Resources.Load<GameObject>("FX/CFXR2 Blood Shape Splash");
+                GameObject effect1 = Instantiate(particlePrefab1, centerPos1, Quaternion.identity);
+                var ps1 = effect1.GetComponent<ParticleSystem>();
+                var main1 = ps1.main;
+                main1.stopAction = ParticleSystemStopAction.Destroy;
+                ps1.Play();
+                float life1 = main1.duration + main1.startLifetime.constantMax;
+                Destroy(effect1, life1 + 0.1f);
+
+                //AudioSource.PlayClipAtPoint(clip, pos, 0.8f);
 
                 //fake batter
                 if (Random.value < 0.0f)
