@@ -4,5 +4,6 @@ public enum GameHashes
     HighlightObject,
     Died,
     QueueDestroyObject,
-    ObjectDestroyed
+    ObjectDestroyed,
+    AttackContact
 }

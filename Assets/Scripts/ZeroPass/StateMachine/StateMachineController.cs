@@ -41,7 +41,12 @@ namespace ZeroPass.StateMachine
 
         public void RemoveStateMachineInstance(StateMachine.Instance state_machine)
         {
-            if (!state_machine.GetStateMachine().saveHistory && !state_machine.GetStateMachine().debugSettings.saveHistory)
+            //if (!state_machine.GetStateMachine().saveHistory && !state_machine.GetStateMachine().debugSettings.saveHistory)
+            //{
+            //    stateMachines.Remove(state_machine);
+            //}
+
+            if (!state_machine.GetStateMachine().saveHistory)
             {
                 stateMachines.Remove(state_machine);
             }

@@ -147,15 +147,15 @@ namespace ZeroPass.StateMachine
             {
             }
 
-            public bool IsConsoleLoggingEnabled()
-            {
-                return enableConsoleLogging || stateMachine.debugSettings.enableConsoleLogging;
-            }
+            //public bool IsConsoleLoggingEnabled()
+            //{
+            //    return enableConsoleLogging || stateMachine.debugSettings.enableConsoleLogging;
+            //}
 
-            public bool IsBreakOnGoToEnabled()
-            {
-                return breakOnGoTo || stateMachine.debugSettings.breakOnGoTo;
-            }
+            //public bool IsBreakOnGoToEnabled()
+            //{
+            //    return breakOnGoTo || stateMachine.debugSettings.breakOnGoTo;
+            //}
 
             public Parameter.Context[] GetParameterContexts()
             {
@@ -466,7 +466,7 @@ namespace ZeroPass.StateMachine
 
         public int updateTableSize;
 
-        public StateMachineDebuggerSettings.Entry debugSettings;
+        //public StateMachineDebuggerSettings.Entry debugSettings;
 
         public bool saveHistory;
 
@@ -513,7 +513,7 @@ namespace ZeroPass.StateMachine
 
         public void InitializeStateMachine()
         {
-            debugSettings = StateMachineDebuggerSettings.Get().CreateEntry(GetType());
+            //debugSettings = StateMachineDebuggerSettings.Get().CreateEntry(GetType());
             BaseState default_state = null;
             InitializeStates(out default_state);
             DebugUtil.Assert(default_state != null);
@@ -555,7 +555,7 @@ namespace ZeroPass.StateMachine
                         }
                         parameter.name = fieldInfo.Name;
                         parameter.idx = parameters.Length;
-                        parameters = (Parameter[])parameters.Append(parameter);
+                        parameters = parameters.Append(parameter).ToArray();
                     }
                     else if (fieldInfo.FieldType.IsSubclassOf(typeof(StateMachine)))
                     {
@@ -951,10 +951,10 @@ namespace ZeroPass.StateMachine
                 {
                     try
                     {
-                        if (IsBreakOnGoToEnabled())
-                        {
-                            Debugger.Break();
-                        }
+                        //if (IsBreakOnGoToEnabled())
+                        //{
+                        //    Debugger.Break();
+                        //}
                         if (base_state != null)
                         {
                             while (base_state.defaultState != null)
