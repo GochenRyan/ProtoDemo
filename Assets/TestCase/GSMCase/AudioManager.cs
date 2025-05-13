@@ -38,24 +38,34 @@ public class AudioManager : RMonoBehaviour
         _instance = null;
     }
 
-    [Header("Mixer Configuration")]
-    [SerializeField]
     private AudioMixer _audioMixer;
-    [SerializeField]
-    private AudioMixerGroup[] _mixerGroups;
-
-    [Header("Audio Source")]
-    [SerializeField]
     private AudioSource _musicSource;
-    [SerializeField]
     private int _initialPoolSize = 8;
 
     private Dictionary<AudioChannel, AudioMixerGroup> _channelGroups = new Dictionary<AudioChannel, AudioMixerGroup>();
     private List<AudioSource> _sfxPool = new List<AudioSource>();
 
+    private Dictionary<AudioChannel, HashSet<AudioSource>> _activeSourcesByChannel =
+    new Dictionary<AudioChannel, HashSet<AudioSource>>();
+
+    private Coroutine _activeFadeCoroutine;
+
     protected override void OnPrefabInit()
     {
-        
+        LoadResources();
+        InitializeChannelGroups();
+        InitializeObjectPool();
+    }
+
+    private void LoadResources()
+    {
+        _audioMixer = Resources.Load<AudioMixer>("Audio/MainMixer");
+
+        _musicSource = gameObject.AddComponent<AudioSource>();
+        _musicSource.playOnAwake = false;
+        _musicSource.loop = true;
+
+        _initialPoolSize = 8;
     }
 
     private void InitializeChannelGroups()
@@ -100,11 +110,14 @@ public class AudioManager : RMonoBehaviour
         return source;
     }
 
-    public void PlaySFX(AudioClip clip, AudioChannel channel,
-                      SpatialSettings settings = null,
-                      Vector2? position = null)
+    public void PlaySFX(AudioClip clip, 
+                        AudioChannel channel,
+                        bool loop = false,
+                        SpatialSettings settings = null,
+                        Vector2? position = null)
     {
         AudioSource source = GetAvailableSource();
+        source.loop = loop;
         ConfigureSource(source, clip, channel, settings, position);
         source.Play();
     }
@@ -123,6 +136,9 @@ public class AudioManager : RMonoBehaviour
                                SpatialSettings settings,
                                Vector2? position)
     {
+#if UNITY_IOS || UNITY_ANDROID
+        source.spatialBlend = 0;
+#else
         source.clip = clip;
         source.outputAudioMixerGroup = _channelGroups[channel];
 
@@ -135,6 +151,13 @@ public class AudioManager : RMonoBehaviour
         {
             source.spatialBlend = 0;
         }
+
+        if (!_activeSourcesByChannel.ContainsKey(channel))
+        {
+            _activeSourcesByChannel.Add(channel, new HashSet<AudioSource>());
+        }
+        _activeSourcesByChannel[channel].Add(source);
+#endif
     }
 
     private void ApplySpatialSettings(AudioSource source, SpatialSettings settings)
@@ -147,7 +170,11 @@ public class AudioManager : RMonoBehaviour
 
     public void PlayMusic(AudioClip musicClip, float fadeDuration = 1f)
     {
-        StartCoroutine(FadeMusic(musicClip, fadeDuration));
+        if (_activeFadeCoroutine != null)
+        {
+            StopCoroutine(_activeFadeCoroutine);
+        }
+        _activeFadeCoroutine = StartCoroutine(FadeMusic(musicClip, fadeDuration));
     }
 
     private IEnumerator FadeMusic(AudioClip newClip, float fadeDuration)
@@ -179,19 +206,24 @@ public class AudioManager : RMonoBehaviour
         _audioMixer.SetFloat(paramName, Mathf.Log10(volume) * 20);
     }
 
+    private IEnumerator TrackAudioPlayback(AudioSource source, AudioChannel channel)
+    {
+        yield return new WaitWhile(() => source.isPlaying);
+        _activeSourcesByChannel[channel].Remove(source);
+    }
+
     public void StopChannel(AudioChannel channel)
     {
-        if (!_channelGroups.TryGetValue(channel, out AudioMixerGroup targetGroup))
+        if (_activeSourcesByChannel.TryGetValue(channel, out var sources))
         {
-            return;
-        }
-
-        foreach (AudioSource source in _sfxPool)
-        {
-            if (source.outputAudioMixerGroup == targetGroup && source.isPlaying)
+            foreach (var source in sources)
             {
-                source.Stop();
+                if (source.isPlaying)
+                {
+                    source.Stop();
+                }
             }
+            sources.Clear();
         }
     }
 }

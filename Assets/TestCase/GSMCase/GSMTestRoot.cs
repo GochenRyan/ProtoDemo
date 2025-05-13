@@ -14,6 +14,10 @@ public class GSMTestRoot : RMonoBehaviour
 
     [Header("Audio Clips")]
     [SerializeField]
+    private AudioClip bgmMainMenu;
+    [SerializeField]
+    private AudioClip bgmGameplay;
+    [SerializeField]
     private AudioClip _uiClick;
     [SerializeField]
     private AudioClip _walkSound;
@@ -23,6 +27,9 @@ public class GSMTestRoot : RMonoBehaviour
     private AudioClip _swordSwing;
     [SerializeField]
     private AudioClip _pageTurnSound;
+
+    [Header("Music Settings")]
+    [SerializeField] private float _musicFadeDuration = 1.5f;
 
     [Header("Spatial Settings")]
     [SerializeField]
@@ -59,8 +66,6 @@ public class GSMTestRoot : RMonoBehaviour
     {
         GSMPlayerRAC = Resources.Load<RuntimeAnimatorController>("Anims/Player/Player");
         GSMEnemy1RAC = Resources.Load<RuntimeAnimatorController>("Anims/Enemy_1/Enemy_1");
-
-
     }
 
     public void LoadEntities()
@@ -101,6 +106,16 @@ public class GSMTestRoot : RMonoBehaviour
     }
 
     #region Audio
+    private void PlayBackgroundMusic()
+    {
+        AudioManager.Instance.PlayMusic(bgmGameplay, _musicFadeDuration);
+    }
+
+    public void SwitchToMenuMusic()
+    {
+        AudioManager.Instance.PlayMusic(bgmMainMenu, _musicFadeDuration);
+    }
+
     public void OnStartButtonClick()
     {
         AudioManager.Instance.PlaySFX(_uiClick, AudioChannel.SFX_UI);
@@ -108,7 +123,9 @@ public class GSMTestRoot : RMonoBehaviour
 
     public void OnPlayerJump(Vector2 playerPos)
     {
-        AudioManager.Instance.PlaySFX(_walkSound, AudioChannel.SFX_Character,
+        AudioManager.Instance.PlaySFX(_walkSound, 
+            AudioChannel.SFX_Character,
+            false,
             new SpatialSettings
             {
                 spatialBlend = 0.5f,
@@ -123,7 +140,7 @@ public class GSMTestRoot : RMonoBehaviour
         _isRaining = !_isRaining;
         if (_isRaining)
         {
-            AudioManager.Instance.PlaySFX(_rainSound, AudioChannel.SFX_Environment,
+            AudioManager.Instance.PlaySFX(_rainSound, AudioChannel.SFX_Environment, false,
                 _environmentSettings);
         }
         else
@@ -134,13 +151,13 @@ public class GSMTestRoot : RMonoBehaviour
 
     public void OnSwordAttack(Vector2 attackPos)
     {
-        AudioManager.Instance.PlaySFX(_swordSwing, AudioChannel.SFX_Weapons,
+        AudioManager.Instance.PlaySFX(_swordSwing, AudioChannel.SFX_Weapons, false,
             _weaponSettings, attackPos);
     }
 
     public void OnCollectDiary(Vector2 collectPos)
     {
-        AudioManager.Instance.PlaySFX(_pageTurnSound, AudioChannel.SFX_Environment,
+        AudioManager.Instance.PlaySFX(_pageTurnSound, AudioChannel.SFX_Environment, false,
             new SpatialSettings
             {
                 spatialBlend = 0.3f,

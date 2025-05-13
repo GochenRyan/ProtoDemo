@@ -285,6 +285,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 017b13394faccdd4889de43b63854d72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bgmMainMenu: {fileID: 8300000, guid: b4158be1c83667341ad531a0faa02515, type: 3}
+  bgmGameplay: {fileID: 8300000, guid: 0f155771bd292c64bbfdcb1ed5fbb2cf, type: 3}
+  _uiClick: {fileID: 8300000, guid: 9ade5d66e717c324ab024900eb13b82b, type: 3}
+  _walkSound: {fileID: 8300000, guid: 613d914b18c4cb249b4162f80f60a72e, type: 3}
+  _rainSound: {fileID: 0}
+  _swordSwing: {fileID: 8300000, guid: 477f711d5d6d5d94ca3e3c39b2ff89f3, type: 3}
+  _pageTurnSound: {fileID: 8300000, guid: 78458bf6e372e264d801c92a1cea6c96, type: 3}
+  _musicFadeDuration: 1.5
 --- !u!114 &301115017
 MonoBehaviour:
   m_ObjectHideFlags: 0
