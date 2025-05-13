@@ -12,17 +12,40 @@ public class GSMTestRoot : RMonoBehaviour
     public static RuntimeAnimatorController GSMPlayerRAC;
     public static RuntimeAnimatorController GSMEnemy1RAC;
 
+    [Header("Audio Clips")]
+    [SerializeField]
+    private AudioClip _uiClick;
+    [SerializeField]
+    private AudioClip _walkSound;
+    [SerializeField]
+    private AudioClip _rainSound;
+    [SerializeField]
+    private AudioClip _swordSwing;
+    [SerializeField]
+    private AudioClip _pageTurnSound;
+
+    [Header("Spatial Settings")]
+    [SerializeField]
+    private SpatialSettings _environmentSettings;
+    [SerializeField]
+    private SpatialSettings _weaponSettings;
+
+    private bool _isRaining;
+
     protected override void OnPrefabInit()
     {
         base.OnPrefabInit();
 
         var _ = SaveGame.Instance;
+
+        AudioManager.Instance.SetChannelVolume(AudioChannel.Music, 0.6f);
+        AudioManager.Instance.SetChannelVolume(AudioChannel.SFX_Environment, 0.4f);
+
         StateMachineManager.CreateInstance();
         LoadAssets();
         EntityTemplates.CreateTemplates();
         LoadEntities();
         SpawnEntities();
-        
     }
 
     protected override void OnSpawn()
@@ -36,6 +59,8 @@ public class GSMTestRoot : RMonoBehaviour
     {
         GSMPlayerRAC = Resources.Load<RuntimeAnimatorController>("Anims/Player/Player");
         GSMEnemy1RAC = Resources.Load<RuntimeAnimatorController>("Anims/Enemy_1/Enemy_1");
+
+
     }
 
     public void LoadEntities()
@@ -74,4 +99,55 @@ public class GSMTestRoot : RMonoBehaviour
         playerAttackSM.smi.sm.attackTarget.Set(_enemy_1, playerAttackSM.smi);
         playerAttackSM.smi.StartSM();
     }
+
+    #region Audio
+    public void OnStartButtonClick()
+    {
+        AudioManager.Instance.PlaySFX(_uiClick, AudioChannel.SFX_UI);
+    }
+
+    public void OnPlayerJump(Vector2 playerPos)
+    {
+        AudioManager.Instance.PlaySFX(_walkSound, AudioChannel.SFX_Character,
+            new SpatialSettings
+            {
+                spatialBlend = 0.5f,
+                minDistance = 2f,
+                maxDistance = 10f
+            },
+            playerPos);
+    }
+
+    public void ToggleRain()
+    {
+        _isRaining = !_isRaining;
+        if (_isRaining)
+        {
+            AudioManager.Instance.PlaySFX(_rainSound, AudioChannel.SFX_Environment,
+                _environmentSettings);
+        }
+        else
+        {
+            AudioManager.Instance.StopChannel(AudioChannel.SFX_Environment);
+        }
+    }
+
+    public void OnSwordAttack(Vector2 attackPos)
+    {
+        AudioManager.Instance.PlaySFX(_swordSwing, AudioChannel.SFX_Weapons,
+            _weaponSettings, attackPos);
+    }
+
+    public void OnCollectDiary(Vector2 collectPos)
+    {
+        AudioManager.Instance.PlaySFX(_pageTurnSound, AudioChannel.SFX_Environment,
+            new SpatialSettings
+            {
+                spatialBlend = 0.3f,
+                minDistance = 0.5f,
+                maxDistance = 3f
+            },
+            collectPos);
+    }
+    #endregion
 }
