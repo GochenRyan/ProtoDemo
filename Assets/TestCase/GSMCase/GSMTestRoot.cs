@@ -1,5 +1,6 @@
 using Serialization;
 using System;
+using System.IO;
 using UnityEngine;
 using ZeroPass;
 using ZeroPass.StateMachine;
@@ -29,7 +30,7 @@ public class GSMTestRoot : RMonoBehaviour
     private AudioClip _pageTurnSound;
 
     [Header("Music Settings")]
-    [SerializeField] private float _musicFadeDuration = 1.5f;
+    [SerializeField] private float _musicFadeDuration = 1e-6f;
 
     [Header("Spatial Settings")]
     [SerializeField]
@@ -43,23 +44,48 @@ public class GSMTestRoot : RMonoBehaviour
     {
         base.OnPrefabInit();
 
+        Instance = this;
+
         var _ = SaveGame.Instance;
 
+        RPlayerPrefs.SetFloat("Music_Volume", 0.6f);
         AudioManager.Instance.SetChannelVolume(AudioChannel.Music, 0.6f);
+        var volume = RPlayerPrefs.GetFloat("Music_Volume");
+
         AudioManager.Instance.SetChannelVolume(AudioChannel.SFX_Environment, 0.4f);
+        PlayBackgroundMusic();
 
         StateMachineManager.CreateInstance();
         LoadAssets();
         EntityTemplates.CreateTemplates();
         LoadEntities();
         SpawnEntities();
+
+        SaveLoader.Instance.saveManager.onRegister += SaveManager_onRegister;
+    }
+
+    private void SaveManager_onRegister(SaveLoadRoot saveLoadRoot)
+    {
+        var gameObject = saveLoadRoot.gameObject;
+        RPrefabID prefabID = gameObject.GetComponent<RPrefabID>();
+
+        if (prefabID != null)
+        {
+            if (prefabID.PrefabTag == GSMPlayerConfig.ID)
+            {
+                _player = gameObject;
+            }
+            else if (prefabID.PrefabTag == GSMEnemy1Config.ID)
+            {
+                _enemy_1 = gameObject;
+                _enemy_1.transform.GetComponent<SpriteRenderer>().flipX = true;
+            }
+        }
     }
 
     protected override void OnSpawn()
     {
         base.OnSpawn();
-
-        StartTest();
     }
 
     private async void LoadAssets()
@@ -121,7 +147,7 @@ public class GSMTestRoot : RMonoBehaviour
         AudioManager.Instance.PlaySFX(_uiClick, AudioChannel.SFX_UI);
     }
 
-    public void OnPlayerJump(Vector2 playerPos)
+    public void OnPlayerWalk(Vector2 playerPos)
     {
         AudioManager.Instance.PlaySFX(_walkSound, 
             AudioChannel.SFX_Character,
@@ -140,7 +166,7 @@ public class GSMTestRoot : RMonoBehaviour
         _isRaining = !_isRaining;
         if (_isRaining)
         {
-            AudioManager.Instance.PlaySFX(_rainSound, AudioChannel.SFX_Environment, false,
+            AudioManager.Instance.PlaySFX(_rainSound, AudioChannel.SFX_Environment, true,
                 _environmentSettings);
         }
         else
@@ -167,4 +193,22 @@ public class GSMTestRoot : RMonoBehaviour
             collectPos);
     }
     #endregion
+
+    #region serialize
+    public void Save()
+    {
+        string savePrefixAndCreateFolder = SaveLoader.GetSavePrefixAndCreateFolder();
+        string path = Path.Combine(savePrefixAndCreateFolder, "text_gsm.sav");
+        SaveLoader.Instance.Save(path, false);
+    }
+
+    public void Load()
+    {
+        string savePrefixAndCreateFolder = SaveLoader.GetSavePrefixAndCreateFolder();
+        string path = Path.Combine(savePrefixAndCreateFolder, "text_gsm.sav");
+        SaveLoader.Instance.Load(path);
+    }
+    #endregion
+
+    public static GSMTestRoot Instance { get; private set; }
 }

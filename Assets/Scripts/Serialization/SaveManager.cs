@@ -263,7 +263,7 @@ namespace Serialization
             {
                 foreach (SaveLoadRoot item in sceneObject.Value)
                 {
-                    UnityEngine.Object.Destroy(item.gameObject);
+                    Destroy(item.gameObject);
                 }
             }
             sceneObjects.Clear();

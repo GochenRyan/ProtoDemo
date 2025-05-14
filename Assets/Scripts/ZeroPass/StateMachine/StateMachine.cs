@@ -648,7 +648,7 @@ namespace ZeroPass.StateMachine
                 dataTable = new object[GetStateMachine().dataTableSize];
                 updateTable = new UpdateTableEntry[GetStateMachine().updateTableSize];
                 controller = ((IStateMachineTarget)master).GetComponent<StateMachineController>();
-                if ((UnityEngine.Object)controller == (UnityEngine.Object)null)
+                if (controller == null)
                 {
                     controller = master.gameObject.AddComponent<StateMachineController>();
                 }
@@ -821,7 +821,7 @@ namespace ZeroPass.StateMachine
                                 if (!master.isNull)
                                 {
                                     RPrefabID component = master.GetComponent<RPrefabID>();
-                                    text = ((!((UnityEngine.Object)component != (UnityEngine.Object)null)) ? ("(" + base.gameObject.name + ").") : ("(" + component.PrefabTag.ToString() + ")."));
+                                    text = ((!(component != null)) ? ("(" + base.gameObject.name + ").") : ("(" + component.PrefabTag.ToString() + ")."));
                                 }
                                 string[] obj = new string[7]
                                 {
@@ -894,7 +894,7 @@ namespace ZeroPass.StateMachine
 
             public override void StartSM()
             {
-                if ((UnityEngine.Object)controller != (UnityEngine.Object)null && !controller.HasStateMachineInstance(this))
+                if (controller != null && !controller.HasStateMachineInstance(this))
                 {
                     controller.AddStateMachineInstance(this);
                 }
@@ -905,7 +905,7 @@ namespace ZeroPass.StateMachine
             {
                 if (!Instance.error)
                 {
-                    if ((UnityEngine.Object)controller != (UnityEngine.Object)null)
+                    if (controller != null)
                     {
                         controller.RemoveStateMachineInstance(this);
                     }
@@ -916,7 +916,7 @@ namespace ZeroPass.StateMachine
                         {
                             PopState();
                         }
-                        if (master != null && (UnityEngine.Object)controller != (UnityEngine.Object)null)
+                        if (master != null && controller != null)
                         {
                             controller.RemoveStateMachineInstance(this);
                         }
@@ -1562,7 +1562,7 @@ namespace ZeroPass.StateMachine
                 public override void Cleanup()
                 {
                     base.Cleanup();
-                    if ((UnityEngine.Object)value != (UnityEngine.Object)null)
+                    if (value != null)
                     {
                         value.GetComponent<RMonoBehaviour>().Unsubscribe(objectDestroyedHandler);
                         objectDestroyedHandler = 0;
@@ -1572,12 +1572,12 @@ namespace ZeroPass.StateMachine
                 public override void Set(GameObject value, StateMachineInstanceType smi)
                 {
                     this.smi = smi;
-                    if ((UnityEngine.Object)base.value != (UnityEngine.Object)null)
+                    if (base.value != null)
                     {
                         base.value.GetComponent<RMonoBehaviour>().Unsubscribe(objectDestroyedHandler);
                         objectDestroyedHandler = 0;
                     }
-                    if ((UnityEngine.Object)value != (UnityEngine.Object)null)
+                    if (value != null)
                     {
                         objectDestroyedHandler = value.GetComponent<RMonoBehaviour>().Subscribe(1969584890, OnObjectDestroyed);
                     }
@@ -1602,7 +1602,7 @@ namespace ZeroPass.StateMachine
             public SMT GetSMI<SMT>(StateMachineInstanceType smi) where SMT : Instance
             {
                 GameObject gameObject = base.Get(smi);
-                if ((UnityEngine.Object)gameObject != (UnityEngine.Object)null)
+                if (gameObject != null)
                 {
                     SMT sMI = StateMachineControllerExtensions.GetSMI<SMT>(gameObject);
                     if (sMI != null)
@@ -1617,13 +1617,13 @@ namespace ZeroPass.StateMachine
             public bool IsNull(StateMachineInstanceType smi)
             {
                 GameObject x = Get(smi);
-                return (UnityEngine.Object)x == (UnityEngine.Object)null;
+                return x == null;
             }
 
             public ComponentType Get<ComponentType>(StateMachineInstanceType smi)
             {
                 GameObject gameObject = base.Get(smi);
-                if ((UnityEngine.Object)gameObject != (UnityEngine.Object)null)
+                if (gameObject != null)
                 {
                     ComponentType component = gameObject.GetComponent<ComponentType>();
                     if (component != null)
@@ -1638,7 +1638,7 @@ namespace ZeroPass.StateMachine
             public void Set(RMonoBehaviour value, StateMachineInstanceType smi)
             {
                 GameObject value2 = null;
-                if ((UnityEngine.Object)value != (UnityEngine.Object)null)
+                if (value != null)
                 {
                     value2 = value.gameObject;
                 }

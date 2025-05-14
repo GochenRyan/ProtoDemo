@@ -1,6 +1,8 @@
 using GAS.Runtime;
+using Serialization;
 using ZeroPass;
 
+[SkipSaveFileSerialization]
 public class CombatEntity : RMonoBehaviour
 {
     public bool IsPlayer

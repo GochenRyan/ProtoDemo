@@ -1,4 +1,3 @@
-using Serialization;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +5,6 @@ using UnityEngine.Audio;
 using ZeroPass;
 using ZeroPass.Serialization;
 
-[SerializationConfig(MemberSerialization.OptIn)]
 public class AudioManager : RMonoBehaviour
 {
     private static AudioManager _instance;
@@ -19,13 +17,7 @@ public class AudioManager : RMonoBehaviour
             {
                 var gameObject = new GameObject(nameof(AudioManager));
                 DontDestroyOnLoad(gameObject);
-                gameObject.SetActive(false);
                 _instance = gameObject.AddComponent<AudioManager>();
-                RPrefabID rPrefabID = gameObject.AddOrGet<RPrefabID>();
-                rPrefabID.PrefabTag = TagManager.Create(nameof(AudioManager), nameof(AudioManager));
-                rPrefabID.UpdateSaveLoadTag();
-                gameObject.AddComponent<SaveLoadRoot>();
-                gameObject.SetActive(true);
             }
 
             return _instance;
@@ -180,12 +172,12 @@ public class AudioManager : RMonoBehaviour
     private IEnumerator FadeMusic(AudioClip newClip, float fadeDuration)
     {
         float currentVolume;
-        _audioMixer.GetFloat("MusicVolume", out currentVolume);
+        _audioMixer.GetFloat("Music_Volume", out currentVolume);
 
         while (currentVolume > -80f)
         {
             currentVolume -= Time.deltaTime * 80 / fadeDuration;
-            _audioMixer.SetFloat("MusicVolume", currentVolume);
+            _audioMixer.SetFloat("Music_Volume", currentVolume);
             yield return null;
         }
 
@@ -195,7 +187,7 @@ public class AudioManager : RMonoBehaviour
         while (currentVolume < 0)
         {
             currentVolume += Time.deltaTime * 80 / fadeDuration;
-            _audioMixer.SetFloat("MusicVolume", currentVolume);
+            _audioMixer.SetFloat("Music_Volume", currentVolume);
             yield return null;
         }
     }

@@ -1,6 +1,5 @@
 using DG.Tweening;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class AttackSMComponent : StateMachineComponent<AttackSMComponent.StatesInstance>
 {
@@ -24,6 +23,7 @@ public class AttackSMComponent : StateMachineComponent<AttackSMComponent.StatesI
         public override void InitializeStates(out BaseState default_state)
         {
             default_state = approach;
+            serializable = true;
             approach.Enter(delegate (StatesInstance smi)
             {
                 float distanceFromTarget = 1f;
@@ -78,15 +78,24 @@ public class AttackSMComponent : StateMachineComponent<AttackSMComponent.StatesI
                 float life1 = main1.duration + main1.startLifetime.constantMax;
                 Destroy(effect1, life1 + 0.1f);
 
-                //AudioSource.PlayClipAtPoint(clip, pos, 0.8f);
+
+                GSMTestRoot.Instance.OnSwordAttack(centerPos);
 
                 //fake batter
-                if (Random.value < 0.0f)
+                if (Random.value < 0.8f)
                 {
                     smi.GoTo(attack);
                 }
                 else
                 {
+                    float duration = 0.5f;
+
+                    var animController = smi.GetComponent<RAnimControllerBase>();
+                    animController.Queue(() =>
+                    {
+                        attackerGO.transform.DOMove(new Vector3(-5, 0, 0), duration).SetEase(Ease.OutQuad);
+                    });
+
                     smi.Queue("Idle", PlayMode.Loop);
                     attackTargetAnimController.Queue("Idle", PlayMode.Loop);
                 }

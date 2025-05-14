@@ -156,7 +156,23 @@ AudioMixerController:
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
   m_UpdateMode: 0
-  m_ExposedParameters: []
+  m_ExposedParameters:
+  - guid: bfbd09b97ace31a45a53a5c20a80683e
+    name: SFX_Character_Volume
+  - guid: ca4d5da08e7379442aa987b8697324d7
+    name: SFX_Environment_Volume
+  - guid: 72091b953e0c59a44b570e174de35f76
+    name: Master_Volume
+  - guid: d56febffa5a62034aa28e5efbb91b717
+    name: Music_Volume
+  - guid: b74a729f50fa1544896184b6b8abd913
+    name: SFX_Volume
+  - guid: 6bcd898e21ed2a44aac019f0138b4de1
+    name: SFX_UI_Volume
+  - guid: 956363c746a9c0f45bf63bfd92339375
+    name: Voice_Volume
+  - guid: 2037639318256c148bae50038c5190d6
+    name: SFX_Weapons_Volume
   m_AudioMixerGroupViews:
   - guids:
     - 11c60914eda8a8d478f520ef5474e834
@@ -218,7 +234,7 @@ AudioMixerSnapshotController:
   m_FloatValues:
     ca4d5da08e7379442aa987b8697324d7: -10
     3eb703038bea74b43b65fd666465bac8: -12
-    bfbd09b97ace31a45a53a5c20a80683e: -5
+    bfbd09b97ace31a45a53a5c20a80683e: -5.000001
     b74a729f50fa1544896184b6b8abd913: -4
     d56febffa5a62034aa28e5efbb91b717: -6
   m_TransitionOverrides: {}
