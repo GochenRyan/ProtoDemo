@@ -1272,6 +1272,45 @@ namespace ZeroPass.StateMachine
             }
         }
 
+        public class StringParameter : Parameter<string>
+        {
+            public new class Context : Parameter<string>.Context
+            {
+                public Context(Parameter parameter, string default_value)
+                    : base(parameter, default_value)
+                {
+                }
+
+                public override void Serialize(BinaryWriter writer)
+                {
+                    writer.WriteRString(value);
+                }
+
+                public override void Deserialize(IReader reader)
+                {
+                    value = reader.ReadRString();
+                }
+
+                public override void ShowEditor(Instance base_smi)
+                {
+                }
+            }
+
+            public StringParameter()
+            {
+            }
+
+            public StringParameter(string default_value)
+                : base(default_value)
+            {
+            }
+
+            public override Parameter.Context CreateContext()
+            {
+                return new Context(this, defaultValue);
+            }
+        }
+
         public class Vector3Parameter : Parameter<Vector3>
         {
             public new class Context : Parameter<Vector3>.Context
