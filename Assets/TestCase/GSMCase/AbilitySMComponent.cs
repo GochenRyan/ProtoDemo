@@ -65,42 +65,13 @@ public class AbilitySMComponent : StateMachineComponent<AbilitySMComponent.State
 
             success.Enter(delegate (StatesInstance smi)
             {
-                
                 var sourceGO = source.Get(smi);
-                SpriteRenderer sr = sourceGO.GetComponent<SpriteRenderer>();
-                Vector3 centerPos = sr.bounds.center;
-
-                //TODO: GAS
-                var particlePrefab = Resources.Load<GameObject>("FX/CFXR Impact Glowing HDR (Blue)");
-                GameObject effect = Instantiate(particlePrefab, centerPos, Quaternion.identity);
-                var ps = effect.GetComponent<ParticleSystem>();
-                var main = ps.main;
-                main.stopAction = ParticleSystemStopAction.Destroy;
-                ps.Play();
-                float life = main.duration + main.startLifetime.constantMax;
-                Destroy(effect, life + 0.1f);
-
-
-                //TODO: Die
+                var asc = sourceGO.GetComponent<AbilitySystemComponent>();
                 var targetGO = target.Get(smi);
-                var targetAnimController = targetGO.GetComponent<RAnimControllerBase>();
-                targetAnimController.Play("Hit");
 
-                SpriteRenderer sr1 = targetGO.GetComponent<SpriteRenderer>();
-                Vector3 centerPos1 = sr1.bounds.center;
-                var particlePrefab1 = Resources.Load<GameObject>("FX/CFXR2 Blood Shape Splash");
-                GameObject effect1 = Instantiate(particlePrefab1, centerPos1, Quaternion.identity);
-                var ps1 = effect1.GetComponent<ParticleSystem>();
-                var main1 = ps1.main;
-                main1.stopAction = ParticleSystemStopAction.Destroy;
-                ps1.Play();
-                float life1 = main1.duration + main1.startLifetime.constantMax;
-                Destroy(effect1, life1 + 0.1f);
+                asc.TryActivateAbility(ability.Get(smi), targetGO);
 
-
-                GSMTestRoot.Instance.OnSwordAttack(centerPos);
-
-                //TODO: Batter  EventHandler GameHashes.Batter
+                // Try use tag to implement combo
                 if (Random.value < 0.8f)
                 {
                     smi.GoTo(applyAbility);
@@ -116,7 +87,12 @@ public class AbilitySMComponent : StateMachineComponent<AbilitySMComponent.State
                     });
 
                     smi.Queue("Idle", PlayMode.Loop);
-                    targetAnimController.Queue("Idle", PlayMode.Loop);
+
+                    if (targetGO != null)
+                    {
+                        var targetAnimController = targetGO.GetComponent<RAnimControllerBase>();
+                        targetAnimController.Queue("Idle", PlayMode.Loop);
+                    }
                 }
             }).ReturnSuccess(); ;
         }

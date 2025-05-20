@@ -5,5 +5,6 @@ public enum GameHashes
     Died,
     QueueDestroyObject,
     ObjectDestroyed,
-    AttackContact
+    AttackContact,
+    DoDamage
 }

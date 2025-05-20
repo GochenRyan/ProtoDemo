@@ -31,6 +31,18 @@ public class CombatEntity : RMonoBehaviour
     protected override void OnSpawn()
     {
         base.OnSpawn();
+
+        var asc = GetComponent<AbilitySystemComponent>();
+        asc.AttrSet<AS_CombatEntity>().HP.RegisterPostCurrentValueChange(OnHpChange);
+    }
+
+    private void OnHpChange(AttributeBase attribute, float oldValue, float newValue)
+    {
+        var delta = oldValue - newValue;
+        if (delta > 0)
+        {
+            Trigger((int)GameHashes.DoDamage, newValue - oldValue);
+        }
     }
 
     public void AIChooseAction()

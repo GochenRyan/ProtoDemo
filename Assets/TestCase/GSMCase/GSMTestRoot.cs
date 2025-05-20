@@ -125,9 +125,9 @@ public class GSMTestRoot : RMonoBehaviour
 
     public void StartTest()
     {
-        var playerAttackSM = _player.GetComponent<AttackSMComponent>();
-        playerAttackSM.smi.sm.attacker.Set(_player, playerAttackSM.smi);
-        playerAttackSM.smi.sm.attackTarget.Set(_enemy_1, playerAttackSM.smi);
+        var playerAttackSM = _player.GetComponent<AbilitySMComponent>();
+        playerAttackSM.smi.sm.source.Set(_player, playerAttackSM.smi);
+        playerAttackSM.smi.sm.target.Set(_enemy_1, playerAttackSM.smi);
         playerAttackSM.smi.StartSM();
     }
 

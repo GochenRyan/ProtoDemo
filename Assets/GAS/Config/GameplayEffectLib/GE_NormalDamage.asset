@@ -45,7 +45,10 @@ MonoBehaviour:
   OngoingRequiredTags: []
   RemoveGameplayEffectsWithTags: []
   ApplicationImmunityTags: []
-  CueOnExecute: []
+  CueOnExecute:
+  - {fileID: 11400000, guid: e4c46a6e0d3abcd48bcc74efedf518f3, type: 2}
+  - {fileID: 11400000, guid: 1a12adf2efe3a9c45b66f53557825be0, type: 2}
+  - {fileID: 11400000, guid: c5055a5152185324b8303ab21bc6bab1, type: 2}
   CueDurational: []
   CueOnAdd: []
   CueOnRemove: []
