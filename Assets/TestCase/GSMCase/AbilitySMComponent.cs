@@ -45,7 +45,7 @@ public class AbilitySMComponent : StateMachineComponent<AbilitySMComponent.State
                     float distanceFromTarget = 1f;
                     float duration = 0.5f;
                     var targetGO = target.Get(smi);
-                    Vector3 direction = (targetGO.transform.position.x < targetGO.transform.position.x) ? Vector3.left : Vector3.right;
+                    Vector3 direction = (sourceGO.transform.position.x < targetGO.transform.position.x) ? Vector3.left : Vector3.right;
                     Vector3 destination = targetGO.transform.position + direction * distanceFromTarget;
                     sourceGO.transform.DOMove(destination, duration).SetEase(Ease.OutQuad).OnComplete(() =>
                     {

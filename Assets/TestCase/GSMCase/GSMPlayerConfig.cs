@@ -13,12 +13,7 @@ public class GSMPlayerConfig : IEntityConfig
         var animator = gameObject.GetComponent<Animator>();
         animator.runtimeAnimatorController = GSMTestRoot.GSMPlayerRAC;
         
-        var asc = gameObject.AddComponent<AbilitySystemComponent>();
-        var minion = UnityEditor.AssetDatabase.LoadAssetAtPath<AbilitySystemComponentPreset>("GAS/Config/AbilitySystemComponentLib/Minion");
-        asc.InitWithPreset(1, minion);
-        asc.AttrSet<AS_CombatEntity>().InitAttack(10);
-        asc.AttrSet<AS_CombatEntity>().InitHP(100);
-        asc.AttrSet<AS_CombatEntity>().InitPower(50);
+        gameObject.AddComponent<AbilitySystemComponent>();
 
         gameObject.AddComponent<DamageSpawner>();
         gameObject.AddComponent<CombatEntity>();
@@ -30,6 +25,12 @@ public class GSMPlayerConfig : IEntityConfig
 
     public void OnPrefabInit(GameObject inst)
     {
+        var asc = inst.GetComponent<AbilitySystemComponent>();
+        var minion = UnityEditor.AssetDatabase.LoadAssetAtPath<AbilitySystemComponentPreset>("Assets/GAS/Config/AbilitySystemComponentLib/Minion.asset");
+        asc.InitWithPreset(1, minion);
+        asc.AttrSet<AS_CombatEntity>().InitAttack(10);
+        asc.AttrSet<AS_CombatEntity>().InitHP(100);
+        asc.AttrSet<AS_CombatEntity>().InitPower(50);
     }
 
     public void OnSpawn(GameObject inst)

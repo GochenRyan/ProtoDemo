@@ -17,8 +17,8 @@ public class CueSFXOneShotSpec : GameplayCueInstantSpec<CueSFXOneShot>
 
     public override void Trigger()
     {
-        var abilitySpec = _parameters.sourceAbilitySpec;
-        var owner = abilitySpec.Owner;
+        var geSpec = _parameters.sourceGameplayEffectSpec;
+        var owner = geSpec.Source;
         var ownerGO = owner.gameObject;
         SpriteRenderer sr = ownerGO.GetComponent<SpriteRenderer>();
         Vector3 centerPos = sr.bounds.center;

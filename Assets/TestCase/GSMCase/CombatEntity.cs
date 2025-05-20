@@ -41,7 +41,8 @@ public class CombatEntity : RMonoBehaviour
         var delta = oldValue - newValue;
         if (delta > 0)
         {
-            Trigger((int)GameHashes.DoDamage, newValue - oldValue);
+            var damageData = new DamageData { num = (int)delta, isCritical = false };
+            Trigger((int)GameHashes.DoDamage, damageData);
         }
     }
 

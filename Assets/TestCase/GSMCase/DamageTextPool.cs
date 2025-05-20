@@ -14,6 +14,7 @@ public class DamageTextPool : MonoBehaviour
             {
                 var gameObject = new GameObject(nameof(DamageTextPool));
                 DontDestroyOnLoad(gameObject);
+                _instance = gameObject.AddComponent<DamageTextPool>();
             }
 
             return _instance;
@@ -26,8 +27,6 @@ public class DamageTextPool : MonoBehaviour
         _instance = null;
     }
 
-    [Header("Settings")]
-    public GameObject damageTextPrefab;
     public int initialPoolSize = 10;
 
     private Queue<DamageTextController> objectPool = new Queue<DamageTextController>();
@@ -47,6 +46,7 @@ public class DamageTextPool : MonoBehaviour
 
     DamageTextController CreateNewInstance()
     {
+        var damageTextPrefab = Resources.Load<GameObject>("Prefabs/DamageText");
         GameObject obj = Instantiate(damageTextPrefab, transform);
         obj.SetActive(false);
         DamageTextController controller = obj.GetComponent<DamageTextController>();
